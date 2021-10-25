@@ -79,7 +79,6 @@ class MusicListFragment : Fragment(R.layout.fragment_music_list) {
     }
 
     private fun setUpRecyclerView() {
-
         songAdapter = SongAdapter()
         binding.rvSongList.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -90,7 +89,7 @@ class MusicListFragment : Fragment(R.layout.fragment_music_list) {
             ) {})
         }
         songAdapter.differ.submitList(songList)
-        songList.clear()
+//        songList.clear()
     }
 
 

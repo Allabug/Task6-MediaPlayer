@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.rsschool.databinding.SongBinding
 import com.rsschool.fragments.MusicListFragmentDirections
+import com.rsschool.helper.Constants
 import com.rsschool.model.Song
 
 
@@ -44,10 +45,11 @@ class SongAdapter : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         val currSong = differ.currentList[position]
+
         holder.itemView.apply {
             binding?.songTitle?.text = currSong.songTitle
             binding?.songArtist?.text = currSong.songArtist
-            binding?.tvDuration?.text = currSong.songDuration
+            binding?.tvDuration?.text = Constants.durationConverter(currSong.songDuration!!.toLong())
             binding?.tvOrder?.text = (position + 1).toString()
 
         }.setOnClickListener { mView ->

@@ -6,8 +6,7 @@ import java.util.concurrent.TimeUnit
 
 object Constants {
 
-    const val REQUEST_CODE_ASK_PERMISSIONS = 123
-    const val FILE_NAME = "playlist.json"
+      const val FILE_NAME = "playlist.json"
     fun Context.toast(msg: String) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG)
             .show()
