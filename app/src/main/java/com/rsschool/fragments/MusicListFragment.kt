@@ -43,7 +43,6 @@ class MusicListFragment : Fragment(R.layout.fragment_music_list) {
         activity?.setActionBar(binding.toolbar)
         loadSong()
         setUpRecyclerView()
-
     }
 
     private fun getJSONDataFromAsset(): String {

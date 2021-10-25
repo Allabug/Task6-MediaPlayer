@@ -2,8 +2,13 @@ package com.rsschool.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.rsschool.databinding.SongBinding
+import com.rsschool.fragments.MusicListFragmentDirections
+import com.rsschool.model.Song
 
 
 class SongAdapter : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
@@ -34,25 +39,25 @@ class SongAdapter : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
             LayoutInflater.from(parent.context),
             parent, false
         )
-
         return SongViewHolder(binding!!)
     }
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         val currSong = differ.currentList[position]
-
         holder.itemView.apply {
             binding?.songTitle?.text = currSong.songTitle
             binding?.songArtist?.text = currSong.songArtist
             binding?.tvDuration?.text = currSong.songDuration
-            binding?.tvOrder?.text = "${position + 1}"
+            binding?.tvOrder?.text = (position + 1).toString()
 
         }.setOnClickListener { mView ->
             val direction = MusicListFragmentDirections
-                .actionMusicListFragmentToPlayMusicFragment(currSong)
+                .actionMusicListFragmentToPlayMusicFragment(
+                    differ.currentList.toTypedArray(),
+                    position
+                )
             mView.findNavController().navigate(direction)
         }
-
     }
 
     override fun getItemCount(): Int {
