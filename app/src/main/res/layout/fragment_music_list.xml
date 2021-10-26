@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".fragments.MusicListFragment">
 
     <android.widget.Toolbar
@@ -17,7 +17,22 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSongList"
         android:layout_width="match_parent"
-        android:padding="12dp"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:padding="12dp" />
 
-</LinearLayout>
+    <ProgressBar
+        android:id="@+id/loadingSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center" />
+
+    <ImageView
+        android:id="@+id/networkError"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_baseline_signal_wifi_off_24" />
+
+</FrameLayout>

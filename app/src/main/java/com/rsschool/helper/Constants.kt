@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit
 
 object Constants {
 
-      const val FILE_NAME = "playlist.json"
+    const val FILE_NAME = "playlist.json"
     fun Context.toast(msg: String) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG)
             .show()
@@ -20,4 +20,6 @@ object Constants {
                     TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration))
         )
     }
+
+    const val NETWORK_FAILURE = "com.rsschool.android.uamp.media.session.NETWORK_FAILURE"
 }

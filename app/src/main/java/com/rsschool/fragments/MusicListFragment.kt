@@ -1,6 +1,7 @@
 package com.rsschool.fragments
 
 
+import android.content.res.AssetManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -97,5 +98,6 @@ class MusicListFragment : Fragment(R.layout.fragment_music_list) {
         super.onDestroy()
         _binding = null
     }
-
 }
+
+private const val MEDIA_ID_ARG = "com.rsschool.fragments.MusicListFragment.MEDIA_ID"

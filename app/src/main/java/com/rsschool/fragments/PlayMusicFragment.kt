@@ -31,6 +31,8 @@ class PlayMusicFragment : Fragment() {
     private lateinit var song: Song
     private var currentPosition = 0
     private var seekLength: Int = 0
+    private val startPosition = 0
+    private var runnable = Runnable { updateSeekBar() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +50,7 @@ class PlayMusicFragment : Fragment() {
         currentPosition = args.currentPosition
         song = songsList[currentPosition]
 
-        downloadImage()
+        updateUI()
 
         Log.d(TAG, "position = $currentPosition, $song")
 //        mMediaPlayer = MediaPlayer()
@@ -61,25 +63,49 @@ class PlayMusicFragment : Fragment() {
             )
         }
 
-        binding.tvTitle.text = song.songTitle
-        binding.tvDuration.text = Constants.durationConverter(song.songDuration!!.toLong())
-        binding.tvAuthor.text = song.songArtist
+
 
         binding.ibPlay.setOnClickListener {
             playSong()
         }
 
         binding.ibNextSong.setOnClickListener {
-            TODO()
+            if (currentPosition < songsList.lastIndex) {
+                currentPosition++
+            } else {
+                currentPosition = startPosition
+            }
+            if (mMediaPlayer!!.isPlaying) {
+                mMediaPlayer!!.stop()
+            }
+            song = songsList[currentPosition]
+            updateUI()
+            playSong()
         }
 
         binding.ibPreviousSong.setOnClickListener {
-            TODO()
+            if (currentPosition > startPosition) {
+                currentPosition--
+            } else {
+                currentPosition = songsList.lastIndex
+            }
+            if (mMediaPlayer!!.isPlaying) {
+                mMediaPlayer!!.stop()
+            }
+            song = songsList[currentPosition]
+            updateUI()
+            playSong()
         }
     }
 
-    private fun downloadImage() {
+    private fun updateUI() {
+        downloadImage()
+        binding.tvTitle.text = song.songTitle
+        binding.tvDuration.text = Constants.durationConverter(song.songDuration!!.toLong())
+        binding.tvAuthor.text = song.songArtist
+    }
 
+    private fun downloadImage() {
         binding.apply {
             Glide.with(this@PlayMusicFragment)
                 .load(song.bitmapUri)
@@ -125,10 +151,8 @@ class PlayMusicFragment : Fragment() {
         Handler(Looper.getMainLooper()).postDelayed(runnable, 50)
     }
 
-    private var runnable = Runnable { updateSeekBar() }
 
     private fun seekBarSetUp() {
-
         if (mMediaPlayer != null) {
             binding.seekBar.progress = mMediaPlayer!!.currentPosition
             binding.seekBar.max = mMediaPlayer!!.duration
