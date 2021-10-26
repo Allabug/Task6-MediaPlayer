@@ -3,30 +3,36 @@
     "songTitle": "Ice and Snow",
     "songArtist": "Rafael Krux",
     "songUri": "https://freepd.com/music/Ice and Snow.mp3",
-    "songDuration": "141000"
+    "songDuration": "141000",
+    "bitmapUri": "https://www.pelicanwater.com/blog/wp-content/uploads/2019/02/cropped-Snow_Blog_Jan_2019-01.jpg"
   },
   {
-    "songTitle": "Ice and Snow",
+    "songTitle": "Desert Fox",
     "songArtist": "Rafael Krux",
-    "songUri": "https://freepd.com/music/Ice and Snow.mp3",
-    "songDuration": "141000"
+    "songUri": "https://freepd.com/music/Desert Fox.mp3",
+    "songDuration": "133000",
+    "bitmapUri": "https://i.natgeofe.com/k/1db1b816-aa92-434e-994f-d3298c9f58f8/fennec-fox-hole.jpg"
   },
   {
-    "songTitle": "Ice and Snow",
-    "songArtist": "Rafael Krux",
-    "songUri": "https://freepd.com/music/Ice and Snow.mp3",
-    "songDuration": "141000"
+    "songTitle": "Coy Koi",
+    "songArtist": "Frank Nora",
+    "songUri": "https://freepd.com/music/Coy Koi.mp3",
+    "songDuration": "48000",
+    "bitmapUri": "https://m.media-amazon.com/images/I/81y0ZQKOi0L._AC_SL1429_.jpg"
   },
   {
-    "songTitle": "Ice and Snow",
-    "songArtist": "Rafael Krux",
-    "songUri": "https://freepd.com/music/Ice and Snow.mp3",
-    "songDuration": "141000"
+    "songTitle": "Tarantella",
+    "songArtist": "Kevin MacLeod",
+    "songUri": "https://freepd.com/music/Village Tarantella.mp3",
+    "songDuration": "53000",
+    "bitmapUri": "https://cdn.britannica.com/00/9100-004-59A78AD8/tarantella-Napoli-August-Bournonville-members-New-York-1842.jpg"
   },
   {
-    "songTitle": "Ice and Snow",
-    "songArtist": "Rafael Krux",
-    "songUri": "https://freepd.com/music/Ice and Snow.mp3",
-    "songDuration": "141000"
+    "songTitle": "Bit Bit Loop",
+    "songArtist": "Kevin MacLeod",
+    "songUri": "https://freepd.com/music/Bit Bit Loop.mp3",
+    "songDuration": "77000",
+    "bitmapUri": "https://d37oebn0w9ir6a.cloudfront.net/account_2263/Cover-EDMFEST-EUROPEepb0310_0e5dada680e923891ab80cf0f35e1758.jpg"
   }
 ]
+

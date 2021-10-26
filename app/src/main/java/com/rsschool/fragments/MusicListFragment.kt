@@ -66,7 +66,7 @@ class MusicListFragment : Fragment(R.layout.fragment_music_list) {
             val gson = Gson()
             val listSongType = object : TypeToken<MutableList<Song>>() {}.type
             songs = gson.fromJson(jsonFileString, listSongType)
-            songs.forEachIndexed { idx, song -> Log.i("TAG", "> Item $idx:\n$song") }
+            songs.forEachIndexed { idx, song -> Log.i("TAG", "> Item $idx:\n$song   url =${song.songUri} ") }
         } catch (ex: Exception) {
             return songs
         }
