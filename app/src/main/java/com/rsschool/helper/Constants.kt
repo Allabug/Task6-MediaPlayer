@@ -21,5 +21,7 @@ object Constants {
         )
     }
 
-    const val NETWORK_FAILURE = "com.rsschool.android.uamp.media.session.NETWORK_FAILURE"
+
+    const val NOTIFICATION_ID = 1
+    const val NOTIFICATION_CHANNEL_ID = "music"
 }

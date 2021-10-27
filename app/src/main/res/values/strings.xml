@@ -10,5 +10,7 @@
     <string name="song_title">song title</string>
     <string name="song_artist">song artist</string>
     <string name="_3_4">3:4</string>
+    <string name="notification_channel_name">Music channel</string>
+    <string name="notification_channel_description">Show the currently playing music</string>
 </resources>
 

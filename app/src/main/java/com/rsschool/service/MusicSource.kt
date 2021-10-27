@@ -5,7 +5,6 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.MediaMetadataCompat.METADATA_KEY_MEDIA_URI
 import androidx.core.net.toUri
-import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -41,17 +40,13 @@ class MusicSource @Inject constructor(
     }
 
     fun asMediaSource(dataSourceFactory: DefaultDataSourceFactory): ConcatenatingMediaSource {
-        val concatenationMediaSource = ConcatenatingMediaSource()
-        songs.forEach { song ->
+        val concatenatingMediaSource = ConcatenatingMediaSource()
+        songs.forEach {  song ->
             val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(
-                    MediaItem.Builder()
-                        .setUri(song.getString(METADATA_KEY_MEDIA_URI).toUri())
-                        .build()
-                )
-            concatenationMediaSource.addMediaSource(mediaSource)
+                .createMediaSource(song.getString(METADATA_KEY_MEDIA_URI).toUri())
+            concatenatingMediaSource.addMediaSource(mediaSource)
         }
-        return concatenationMediaSource
+        return concatenatingMediaSource
     }
 
     fun asMediaItems() = songs.map { song ->
