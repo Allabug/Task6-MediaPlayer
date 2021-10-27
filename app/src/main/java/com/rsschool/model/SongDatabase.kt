@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class SongDatabase @Inject constructor(private val assetManager: AssetManager) {
 
-    private var songList: List<Song>? = null
+    var songList: List<Song>? = null
 
     init {
         getListOfAllSongs()

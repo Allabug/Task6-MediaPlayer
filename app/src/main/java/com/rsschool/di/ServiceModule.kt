@@ -27,7 +27,7 @@ object ServiceModule {
 
     @ServiceScoped
     @Provides
-    fun provideSongPlaylist(assetManager: AssetManager) = SongDatabase(assetManager)
+    fun provideSongDatabase(assetManager: AssetManager) = SongDatabase(assetManager)
 
     @ServiceScoped
     @Provides

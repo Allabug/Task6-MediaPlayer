@@ -1,4 +1,4 @@
-package service
+package com.rsschool.service
 
 import android.app.PendingIntent
 import android.os.Bundle
