@@ -6,34 +6,39 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.RequestManager
+import com.rsschool.R
 import com.rsschool.databinding.SongBinding
 import com.rsschool.fragments.MusicListFragmentDirections
 import com.rsschool.helper.Constants
 import com.rsschool.model.Song
+import javax.inject.Inject
 
 
-class SongAdapter : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
+class SongAdapter @Inject constructor(private val glide: RequestManager) :
+    RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
 
     private var binding: SongBinding? = null
 
     inner class SongViewHolder(itemBinding: SongBinding) :
         RecyclerView.ViewHolder(itemBinding.root)
 
-
     private val differCallback = object :
         DiffUtil.ItemCallback<Song>() {
         override fun areItemsTheSame(oldItem: Song, newItem: Song): Boolean {
-            return oldItem.songUri == newItem.songUri &&
-                    oldItem.songTitle == newItem.songTitle &&
-                    oldItem.songArtist == newItem.songArtist
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Song, newItem: Song): Boolean {
-            return newItem == oldItem
+            return newItem.hashCode() == oldItem.hashCode()
         }
     }
 
     val differ = AsyncListDiffer(this, differCallback)
+
+    var songs: List<Song>
+        get() = differ.currentList
+        set(value) = differ.submitList(value)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder {
         binding = SongBinding.inflate(
@@ -45,24 +50,27 @@ class SongAdapter : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         val currSong = differ.currentList[position]
+        binding?.apply {  glide.load(currSong.bitmapUri).into(songImage) }
 
         holder.itemView.apply {
             binding?.songTitle?.text = currSong.songTitle
             binding?.songArtist?.text = currSong.songArtist
-            binding?.tvDuration?.text = Constants.durationConverter(currSong.songDuration!!.toLong())
             binding?.tvOrder?.text = (position + 1).toString()
+//            binding?.tvDuration?.text = Constants.durationConverter(currSong.duration.toLong())
 
-        }.setOnClickListener { mView ->
-            val direction = MusicListFragmentDirections
-                .actionMusicListFragmentToPlayMusicFragment(
-                    differ.currentList.toTypedArray(),
-                    position
-                )
-            mView.findNavController().navigate(direction)
+            setOnClickListener {
+                onItemClickListener?.let { click ->
+                    click(currSong)
+                }
+            }
         }
     }
 
-    override fun getItemCount(): Int {
-        return differ.currentList.size
+    private var onItemClickListener: ((Song) -> Unit)? = null
+    fun setOnItemClickListener(listener: (Song) -> Unit) {
+        onItemClickListener = listener
     }
+
+    override fun getItemCount() = songs.size
+
 }

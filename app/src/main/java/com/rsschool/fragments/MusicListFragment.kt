@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
@@ -17,19 +19,25 @@ import com.rsschool.R
 import com.rsschool.adapter.SongAdapter
 import com.rsschool.databinding.FragmentMusicListBinding
 import com.rsschool.helper.Constants.FILE_NAME
+import com.rsschool.helper.Status
 import com.rsschool.model.Song
+import com.rsschool.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MusicListFragment : Fragment(R.layout.fragment_music_list) {
+
+    lateinit var mainViewModel: MainViewModel
+
+    @Inject
+    lateinit var songAdapter: SongAdapter
 
     private var _binding: FragmentMusicListBinding? = null
     private val binding get() = _binding!!
-    private var songList: MutableList<Song> = ArrayList()
-    private lateinit var songAdapter: SongAdapter
 
-
-    override fun onCreateView(
+        override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
@@ -42,62 +50,48 @@ class MusicListFragment : Fragment(R.layout.fragment_music_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.setActionBar(binding.toolbar)
-        loadSong()
+
+        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
         setUpRecyclerView()
-    }
+        subscribeToObservers()
 
-    private fun getJSONDataFromAsset(): String {
-        var jsonString = ""
-        try {
-            jsonString =
-                requireContext().assets.open(FILE_NAME).bufferedReader().use { it.readText() }
-        } catch (ex: IOException) {
-            Log.e("TAG", "Could not read file from assets, e")
-            ex.printStackTrace()
-            return jsonString
+        songAdapter.setOnItemClickListener {
+            mainViewModel.playOrToggleSong(it)
         }
-        return jsonString
     }
 
-    private fun getListOfAllSongs(): MutableList<Song> {
-        var songs: MutableList<Song> = ArrayList()
-        try {
-            val jsonFileString = getJSONDataFromAsset()
-            Log.i("TAG", jsonFileString)
-            val gson = Gson()
-            val listSongType = object : TypeToken<MutableList<Song>>() {}.type
-            songs = gson.fromJson(jsonFileString, listSongType)
-            songs.forEachIndexed { idx, song -> Log.i("TAG", "> Item $idx:\n$song   url =${song.songUri} ") }
-        } catch (ex: Exception) {
-            return songs
+    private fun subscribeToObservers() {
+        mainViewModel.mediaItems.observe(viewLifecycleOwner) {result ->
+            when(result.status) {
+                Status.SUCCESS -> {
+                    binding.loadingSpinner.isVisible = false
+                    result.data?.let { songs ->
+                        songAdapter.songs = songs
+                    }
+                }
+                Status.ERROR -> Unit
+                Status.LOADING ->  binding.loadingSpinner.isVisible = true
+            }
+
         }
-        return songs
-    }
-
-    private fun loadSong() {
-        songList = getListOfAllSongs()
-        Log.i("TAG", "size = ${songList.size}")
     }
 
     private fun setUpRecyclerView() {
-        songAdapter = SongAdapter()
+
         binding.rvSongList.apply {
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
             adapter = songAdapter
             addItemDecoration(object : DividerItemDecoration(
                 activity, LinearLayout.VERTICAL
             ) {})
         }
-        songAdapter.differ.submitList(songList)
-//        songList.clear()
     }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
+//
+//
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        _binding = null
+//    }
 }
 
-private const val MEDIA_ID_ARG = "com.rsschool.fragments.MusicListFragment.MEDIA_ID"

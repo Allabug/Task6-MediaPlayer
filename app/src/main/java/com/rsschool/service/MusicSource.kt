@@ -17,7 +17,6 @@ class MusicSource @Inject constructor(
     private val musicDatabase: SongDatabase
 ) {
 
-
     var songs = emptyList<MediaMetadataCompat>()
 
     suspend fun getMediaData() = withContext(Dispatchers.IO) {
@@ -86,7 +85,6 @@ class MusicSource @Inject constructor(
             true
         }
     }
-
 
     enum class State {
         CREATED,
