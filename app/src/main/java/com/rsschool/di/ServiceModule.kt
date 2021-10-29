@@ -54,5 +54,4 @@ object ServiceModule {
         context,
         Util.getUserAgent(context, context.getString(R.string.app_name))
     )
-
 }

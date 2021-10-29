@@ -1,207 +1,136 @@
 package com.rsschool.fragments
 
-import android.annotation.SuppressLint
-import android.media.AudioAttributes
-import android.media.MediaPlayer
+
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
+import android.support.v4.media.session.PlaybackStateCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.RequestManager
 import com.rsschool.R
 import com.rsschool.databinding.FragmentPlayMusicBinding
-import com.rsschool.helper.Constants
+import com.rsschool.helper.Status
 import com.rsschool.model.Song
+import com.rsschool.service.isPlaying
+import com.rsschool.service.toSong
+import com.rsschool.viewmodel.MainViewModel
+import com.rsschool.viewmodel.SongViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.*
+import javax.inject.Inject
 
-private const val TAG = "PlayMusicFragment"
 
-class PlayMusicFragment : Fragment() {
-//    private var _binding: FragmentPlayMusicBinding? = null
-//    private val binding get() = _binding!!
-//    private val args: PlayMusicFragmentArgs by navArgs()
-//    private var mMediaPlayer: MediaPlayer? = null
-//    private var songsList: Array<Song> = arrayOf()
-//    private lateinit var song: Song
-//    private var currentPosition = 0
-//    private var seekLength: Int = 0
-//    private val startPosition = 0
-//    private var runnable = Runnable { updateSeekBar() }
-//
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View {
-//        _binding = FragmentPlayMusicBinding.inflate(
-//            inflater, container, false
-//        )
-//        return binding.root
-//    }
-//
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//        songsList = args.listOfSongs
-//        currentPosition = args.currentPosition
-//        song = songsList[currentPosition]
-//
-//        updateUI()
-//
-//        Log.d(TAG, "position = $currentPosition, $song")
-//
-//        mMediaPlayer = MediaPlayer().apply {
-//            setAudioAttributes(
-//                AudioAttributes.Builder()
-//                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-//                    .setUsage(AudioAttributes.USAGE_MEDIA)
-//                    .build()
-//            )
-//        }
-//
-//
-//
-//        binding.ibPlay.setOnClickListener {
-//            playSong()
-//        }
-//
-//        binding.ibNextSong.setOnClickListener {
-//            if (currentPosition < songsList.lastIndex) {
-//                currentPosition++
-//            } else {
-//                currentPosition = startPosition
-//            }
-//            if (mMediaPlayer!!.isPlaying) {
-//                mMediaPlayer!!.stop()
-//            }
-//            song = songsList[currentPosition]
-//            updateUI()
-//            playSong()
-//        }
-//
-//        binding.ibPreviousSong.setOnClickListener {
-//            if (currentPosition > startPosition) {
-//                currentPosition--
-//            } else {
-//                currentPosition = songsList.lastIndex
-//            }
-//            if (mMediaPlayer!!.isPlaying) {
-//                mMediaPlayer!!.stop()
-//            }
-//            song = songsList[currentPosition]
-//            updateUI()
-//            playSong()
-//        }
-//    }
-//
-//    private fun updateUI() {
-//        downloadImage()
-//        binding.tvTitle.text = song.songTitle
-//        binding.tvDuration.text = Constants.durationConverter(song.songDuration!!.toLong())
-//        binding.tvAuthor.text = song.songArtist
-//    }
-//
-//    private fun downloadImage() {
-//        binding.apply {
-//            Glide.with(this@PlayMusicFragment)
-//                .load(song.bitmapUri)
-//                .error(R.drawable.ic_cover)
-//                .into(ibCover)
-//        }
-//    }
-//
-//
-//    private fun playSong() {
-//        if (!mMediaPlayer!!.isPlaying) {
-//            mMediaPlayer!!.reset()
-//            mMediaPlayer!!.setDataSource(song.songUri)
-//            mMediaPlayer!!.prepare()
-//            mMediaPlayer!!.seekTo(seekLength)
-//            mMediaPlayer!!.start()
-//
-//            binding.ibPlay.setImageDrawable(
-//                ContextCompat.getDrawable(
-//                    activity?.applicationContext!!,
-//                    R.drawable.ic_pause
-//                )
-//            )
-//            updateSeekBar()
-//        } else {
-//            mMediaPlayer!!.pause()
-//            seekLength = mMediaPlayer!!.currentPosition
-//            binding.ibPlay.setImageDrawable(
-//                ContextCompat.getDrawable(
-//                    activity?.applicationContext!!,
-//                    R.drawable.ic_play
-//                )
-//            )
-//        }
-//    }
-//
-//    private fun updateSeekBar() {
-//        if (mMediaPlayer != null) {
-//            binding.tvCurrentTime.text =
-//                Constants.durationConverter(mMediaPlayer!!.currentPosition.toLong())
-//        }
-//        seekBarSetUp()
-//        Handler(Looper.getMainLooper()).postDelayed(runnable, 50)
-//    }
-//
-//
-//    private fun seekBarSetUp() {
-//        if (mMediaPlayer != null) {
-//            binding.seekBar.progress = mMediaPlayer!!.currentPosition
-//            binding.seekBar.max = mMediaPlayer!!.duration
-//        }
-//        binding.seekBar.setOnSeekBarChangeListener(@SuppressLint("AppCompatCustomView")
-//        object : SeekBar.OnSeekBarChangeListener {
-//            override fun onProgressChanged(
-//                seekBar: SeekBar?,
-//                progress: Int,
-//                fromUser: Boolean
-//            ) {
-//                if (fromUser) {
-//                    mMediaPlayer!!.seekTo(progress)
-//                    binding.tvCurrentTime.text = Constants.durationConverter(progress.toLong())
-//                }
-//            }
-//
-//            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-//            }
-//
-//            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-//                if (mMediaPlayer != null && mMediaPlayer!!.isPlaying) {
-//                    if (seekBar != null) {
-//                        mMediaPlayer!!.seekTo(seekBar.progress)
-//                    }
-//                }
-//            }
-//        })
-//    }
-//
-//
-//    private fun clearMediaPlayer() {
-//        if (mMediaPlayer != null) {
-//            if (mMediaPlayer!!.isPlaying) {
-//                mMediaPlayer!!.stop()
-//            }
-//            mMediaPlayer!!.release()
-//            mMediaPlayer = null
-//        }
-//    }
-//
-////    override fun onStop() {
-////        super.onStop()
-////        playSong()
-////    }
-//
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        clearMediaPlayer()
-//    }
+@AndroidEntryPoint
+class PlayMusicFragment : Fragment(R.layout.fragment_play_music) {
+
+    @Inject
+    lateinit var glide: RequestManager
+
+    private lateinit var mainViewModel: MainViewModel
+    private val songViewModel: SongViewModel by viewModels()
+
+    private var curPlayingSong: Song? = null
+    private var playbackState: PlaybackStateCompat? = null
+    private var shouldUpdateSeekbar = true
+
+    private var _binding: FragmentPlayMusicBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentPlayMusicBinding.inflate(
+            inflater, container, false
+        )
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        subscribeToObservers()
+
+        binding.ibPlay.setOnClickListener {
+            curPlayingSong?.let {
+                mainViewModel.playOrToggleSong(it, true)
+            }
+        }
+
+        binding.ibPreviousSong.setOnClickListener {
+            mainViewModel.skipToPreviousSong()
+        }
+
+        binding.ibNextSong.setOnClickListener {
+            mainViewModel.skipToNextSong()
+        }
+
+        binding.seekBar.setOnSeekBarChangeListener(
+            object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    if (fromUser) {
+                        setCurPlayerTimeToTextView(progress.toLong())
+                    }
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                    shouldUpdateSeekbar = false
+                }
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                    binding.seekBar.let {
+                        mainViewModel.seekTo(it.progress.toLong())
+                        shouldUpdateSeekbar = true
+                    }
+                }
+            }
+        )
+    }
+
+    private fun updateTitleAndSongImage(song: Song) {
+        binding.tvTitle.text = song.songTitle
+        binding.tvAuthor.text = song.songArtist
+        glide.load(song.bitmapUri).into(binding.ibCover)
+    }
+
+    private fun subscribeToObservers() {
+            mainViewModel.curPlayingSong.observe(viewLifecycleOwner) {
+            if (it == null) return@observe
+            curPlayingSong = it.toSong()
+            updateTitleAndSongImage(curPlayingSong!!)
+        }
+        mainViewModel.playbackState.observe(viewLifecycleOwner) {
+            playbackState = it
+            binding.ibPlay.setImageResource(
+                if (playbackState?.isPlaying == true) R.drawable.ic_pause else R.drawable.ic_play
+            )
+            binding.seekBar.progress = it?.position?.toInt() ?: 0
+        }
+        songViewModel.curPlayerPosition.observe(viewLifecycleOwner) {
+            if (shouldUpdateSeekbar) {
+                binding.seekBar.progress = it.toInt()
+                setCurPlayerTimeToTextView(it)
+            }
+        }
+        songViewModel.curSongDuration.observe(viewLifecycleOwner) {
+            binding.seekBar.max = it.toInt()
+            val dateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
+            binding.tvDuration.text = dateFormat.format(it)
+        }
+    }
+
+    private fun setCurPlayerTimeToTextView(ms: Long) {
+        val dateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
+        binding.tvCurrentTime.text = dateFormat.format(ms)
+    }
 
 }

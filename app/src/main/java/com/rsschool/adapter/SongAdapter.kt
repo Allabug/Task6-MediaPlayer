@@ -7,10 +7,8 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
-import com.rsschool.R
 import com.rsschool.databinding.SongBinding
 import com.rsschool.fragments.MusicListFragmentDirections
-import com.rsschool.helper.Constants
 import com.rsschool.model.Song
 import javax.inject.Inject
 
@@ -25,6 +23,7 @@ class SongAdapter @Inject constructor(private val glide: RequestManager) :
 
     private val differCallback = object :
         DiffUtil.ItemCallback<Song>() {
+
         override fun areItemsTheSame(oldItem: Song, newItem: Song): Boolean {
             return oldItem.id == newItem.id
         }
@@ -50,15 +49,16 @@ class SongAdapter @Inject constructor(private val glide: RequestManager) :
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         val currSong = differ.currentList[position]
-        binding?.apply {  glide.load(currSong.bitmapUri).into(songImage) }
+        binding?.apply { glide.load(currSong.bitmapUri).into(songImage) }
 
         holder.itemView.apply {
             binding?.songTitle?.text = currSong.songTitle
             binding?.songArtist?.text = currSong.songArtist
             binding?.tvOrder?.text = (position + 1).toString()
-//            binding?.tvDuration?.text = Constants.durationConverter(currSong.duration.toLong())
-
-            setOnClickListener {
+            setOnClickListener { mView ->
+                val direction = MusicListFragmentDirections
+                    .actionMusicListFragmentToPlayMusicFragment()
+                mView.findNavController().navigate(direction)
                 onItemClickListener?.let { click ->
                     click(currSong)
                 }
@@ -72,5 +72,4 @@ class SongAdapter @Inject constructor(private val glide: RequestManager) :
     }
 
     override fun getItemCount() = songs.size
-
 }

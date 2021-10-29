@@ -3,7 +3,6 @@ package com.rsschool.service
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
-import android.support.v4.media.MediaMetadataCompat.METADATA_KEY_MEDIA_URI
 import androidx.core.net.toUri
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -40,9 +39,9 @@ class MusicSource @Inject constructor(
 
     fun asMediaSource(dataSourceFactory: DefaultDataSourceFactory): ConcatenatingMediaSource {
         val concatenatingMediaSource = ConcatenatingMediaSource()
-        songs.forEach {  song ->
+        songs.forEach { song ->
             val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(song.getString(METADATA_KEY_MEDIA_URI).toUri())
+                .createMediaSource(song.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI).toUri())
             concatenatingMediaSource.addMediaSource(mediaSource)
         }
         return concatenatingMediaSource
@@ -50,7 +49,7 @@ class MusicSource @Inject constructor(
 
     fun asMediaItems() = songs.map { song ->
         val desc = MediaDescriptionCompat.Builder()
-            .setMediaUri(song.getString(METADATA_KEY_MEDIA_URI).toUri())
+            .setMediaUri(song.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI).toUri())
             .setTitle(song.description.title)
             .setSubtitle(song.description.subtitle)
             .setMediaId(song.description.mediaId)
@@ -58,7 +57,6 @@ class MusicSource @Inject constructor(
             .build()
         MediaBrowserCompat.MediaItem(desc, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
     }.toMutableList()
-
 
     private val onReadyListeners = mutableListOf<(Boolean) -> Unit>()
 

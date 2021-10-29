@@ -9,6 +9,7 @@ import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.rsschool.R
 import com.rsschool.helper.Constants.NETWORK_ERROR
 import com.rsschool.helper.Event
 import com.rsschool.helper.Resource
@@ -67,7 +68,7 @@ class MusicServiceConnection(context: Context) {
             _isConnected.postValue(
                 Event(
                     Resource.error(
-                        "The connection was suspended", false
+                        context.getString(R.string.connection_suspended), false
                     )
                 )
             )
@@ -77,7 +78,7 @@ class MusicServiceConnection(context: Context) {
             _isConnected.postValue(
                 Event(
                     Resource.error(
-                        "Couldn't connect to media browser", false
+                        context.getString(R.string.no_connection), false
                     )
                 )
             )
@@ -111,5 +112,4 @@ class MusicServiceConnection(context: Context) {
             mediaBrowserConnectionCallback.onConnectionSuspended()
         }
     }
-
 }

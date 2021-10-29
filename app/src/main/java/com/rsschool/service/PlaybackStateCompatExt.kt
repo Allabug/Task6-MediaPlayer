@@ -4,9 +4,6 @@ import android.os.SystemClock
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import com.rsschool.model.Song
-import java.text.SimpleDateFormat
-import java.util.*
-
 
 inline val PlaybackStateCompat.isPrepared
     get() = state == PlaybackStateCompat.STATE_BUFFERING ||
@@ -28,6 +25,13 @@ inline val PlaybackStateCompat.currentPlaybackPosition: Long
         (timeDifference * playbackSpeed + position).toLong()
     } else position
 
+inline val PlaybackStateCompat.currentplaybackPosition: Long
+
+    get() = if (state == PlaybackStateCompat.STATE_PLAYING) {
+        val timeDelta = SystemClock.elapsedRealtime() - lastPositionUpdateTime
+        (position + (timeDelta * playbackSpeed)).toLong()
+    } else position
+
 fun MediaMetadataCompat.toSong(): Song? {
     return description?.let {
         Song(
@@ -36,11 +40,7 @@ fun MediaMetadataCompat.toSong(): Song? {
             it.subtitle.toString(),
             it.iconUri.toString(),
             it.mediaUri.toString(),
-          )
+        )
     }
 }
 
-fun Long.toTimeFormat(): String {
-    val dateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
-    return dateFormat.format(this)
-}

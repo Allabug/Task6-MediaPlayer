@@ -13,7 +13,6 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.rsschool.helper.Constants
 import com.rsschool.helper.Constants.MEDIA_ROOT_ID
 import com.rsschool.helper.Constants.NETWORK_ERROR
 import com.rsschool.service.callbacks.MusicPlaybackPreparer
@@ -127,15 +126,14 @@ class MusicService : MediaBrowserServiceCompat() {
         serviceScope.cancel()
         exoPlayer.release()
         exoPlayer.removeListener(musicPlayerEventListener)
-
     }
 
     override fun onGetRoot(
         clientPackageName: String,
         clientUid: Int,
         rootHints: Bundle?
-    ): BrowserRoot? {
-        return BrowserRoot(Constants.MEDIA_ROOT_ID, null)
+    ): BrowserRoot {
+        return BrowserRoot(MEDIA_ROOT_ID, null)
     }
 
     override fun onLoadChildren(

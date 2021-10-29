@@ -49,13 +49,4 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvDuration"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_weight="0"
-        android:gravity="center"
-        android:text="@string/_3_4"
-        android:textColor="@color/white"
-        android:textSize="18sp" />
 </LinearLayout>

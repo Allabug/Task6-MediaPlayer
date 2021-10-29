@@ -35,7 +35,6 @@ class MusicPlaybackPreparer(
             val itemToPlay = musicSource.songs.find { mediaId == it.description.mediaId }
             playerPrepared(itemToPlay)
         }
-
     }
 
     override fun onPrepareFromSearch(query: String, playWhenReady: Boolean, extras: Bundle?) = Unit

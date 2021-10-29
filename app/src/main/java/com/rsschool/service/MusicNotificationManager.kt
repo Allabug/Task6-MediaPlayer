@@ -39,14 +39,16 @@ class MusicNotificationManager(
         }
     }
 
-    fun showNotification(player:Player) {
-      notificationManager.setPlayer(player)
+    fun showNotification(player: Player) {
+        notificationManager.setPlayer(player)
     }
 
     private inner class DescriptionAdapter(
         private val mediaController: MediaControllerCompat
     ) : PlayerNotificationManager.MediaDescriptionAdapter {
+
         override fun getCurrentContentTitle(player: Player): CharSequence {
+            newSongCallback()
             return mediaController.metadata.description.title.toString()
         }
 
@@ -54,7 +56,7 @@ class MusicNotificationManager(
             return mediaController.sessionActivity
         }
 
-        override fun getCurrentContentText(player: Player): CharSequence? {
+        override fun getCurrentContentText(player: Player): CharSequence {
             return mediaController.metadata.description.subtitle.toString()
         }
 
@@ -77,8 +79,5 @@ class MusicNotificationManager(
                 })
             return null
         }
-
     }
-
-
 }

@@ -12,5 +12,8 @@
     <string name="_3_4">3:4</string>
     <string name="notification_channel_name">Music channel</string>
     <string name="notification_channel_description">Show the currently playing music</string>
+    <string name="no_connection">"Couldn't connect to media browser"</string>
+    <string name="no_internet_connection">"Couldn't connect to the server.Please check your internet connection"</string>
+    <string name="connection_suspended">The connection was suspended</string>
 </resources>
 

@@ -19,11 +19,10 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val musicServiceConnection: MusicServiceConnection
 ) : ViewModel() {
+
     private val _mediaItems = MutableLiveData<Resource<List<Song>>>()
     val mediaItems: MutableLiveData<Resource<List<Song>>> = _mediaItems
 
-    val isConnected = musicServiceConnection.isConnected
-    val networkError = musicServiceConnection.networkError
     val curPlayingSong = musicServiceConnection.curPlayingSong
     val playbackState = musicServiceConnection.playbackState
 

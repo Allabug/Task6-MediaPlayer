@@ -39,5 +39,4 @@ object AppModule {
             .error(R.drawable.ic_cover)
             .diskCacheStrategy(DiskCacheStrategy.DATA)
     )
-
 }

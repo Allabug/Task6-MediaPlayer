@@ -1,9 +1,7 @@
 package com.rsschool.fragments
 
 
-import android.content.res.AssetManager
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,17 +11,12 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.rsschool.R
 import com.rsschool.adapter.SongAdapter
 import com.rsschool.databinding.FragmentMusicListBinding
-import com.rsschool.helper.Constants.FILE_NAME
 import com.rsschool.helper.Status
-import com.rsschool.model.Song
 import com.rsschool.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,7 +30,7 @@ class MusicListFragment : Fragment(R.layout.fragment_music_list) {
     private var _binding: FragmentMusicListBinding? = null
     private val binding get() = _binding!!
 
-        override fun onCreateView(
+    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
@@ -61,8 +54,8 @@ class MusicListFragment : Fragment(R.layout.fragment_music_list) {
     }
 
     private fun subscribeToObservers() {
-        mainViewModel.mediaItems.observe(viewLifecycleOwner) {result ->
-            when(result.status) {
+        mainViewModel.mediaItems.observe(viewLifecycleOwner) { result ->
+            when (result.status) {
                 Status.SUCCESS -> {
                     binding.loadingSpinner.isVisible = false
                     result.data?.let { songs ->
@@ -70,14 +63,12 @@ class MusicListFragment : Fragment(R.layout.fragment_music_list) {
                     }
                 }
                 Status.ERROR -> Unit
-                Status.LOADING ->  binding.loadingSpinner.isVisible = true
+                Status.LOADING -> binding.loadingSpinner.isVisible = true
             }
-
         }
     }
 
     private fun setUpRecyclerView() {
-
         binding.rvSongList.apply {
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
@@ -87,11 +78,10 @@ class MusicListFragment : Fragment(R.layout.fragment_music_list) {
             ) {})
         }
     }
-//
-//
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        _binding = null
-//    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }
 
